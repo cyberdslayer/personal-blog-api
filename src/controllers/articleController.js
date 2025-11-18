@@ -1,8 +1,8 @@
-const Article = require('../models/Article');
+const Article = require('../models/articleModel');
 
 exports.getAllArticles = async (req, res) => {
     try {
-        const articles = await Article.findALL();
+        const articles = await Article.findAllArticles();
         res.status(200).json(articles);
     } catch (error) {
         res.status(500).json({message:'Error getting articles', error:error.message});
@@ -11,8 +11,8 @@ exports.getAllArticles = async (req, res) => {
 
 exports.createArticle = async (req, res) => {
     try {
-        const {} = req.body;
-        const article = await Article.create();
+        const {title, content} = req.body;
+        const article = await Article.createArticle({title, content});
         res.status(200).json(article);
     } catch(error){
         res.status(500).json({message:'Error creating article', error: error.message});
@@ -21,8 +21,8 @@ exports.createArticle = async (req, res) => {
 
 exports.getArticleById = async (req, res) => {
     try{
-        const {id} = req.body;
-        const article = await Article.findId(id);
+        const {id} = req.params;
+        const article = await Article.findArticleById(id);
         res.status(200).json(article);
     } catch(error) {
         res.status(500).json({message: 'Error finding the article', error:error.message});
@@ -32,7 +32,7 @@ exports.getArticleById = async (req, res) => {
 exports.updateArticle = async (req, res) => {
     try {
         const {id} = req.body;
-        const updatedArticle = await Article.update();
+        const updatedArticle = await Article.updateArticle();
         res.status(200).json({message:"Article updated successfully", updatedArticle});
     } catch (error) {
         res.status(500).json({message:'Failed to update', error:error.message});
